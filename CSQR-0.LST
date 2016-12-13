@@ -1,0 +1,54 @@
+' /// ATARI Falcon030 NearTrueColor Displayer - KOSS 1997-1999 ///
+'
+' Init Hardware
+RESERVE -4*1024*1024
+GOSUB change_reso(1)
+'Init Software
+xdisplay&=320
+ydisplay&=240
+largeur&=xdisplay&*2
+DIM color&(3)
+DIM rgb&(3)
+rgb&(0)=32
+rgb&(1)=64
+rgb&(2)=32
+DIM modulo&(3)
+modulo&(0)=0
+modulo&(1)=2
+modulo&(2)=1
+'Precalc Software
+FOR order&=0 TO 2
+  SELECT modulo&(order&)
+  CASE 0
+    color&(order&)=2048
+  CASE 1
+    color&(order&)=32
+  CASE 2
+    color&(order&)=1
+  ENDSELECT
+NEXT order&
+base%=rgb&(modulo&(2))*largeur&
+screen_adr%=XBIOS(2)
+disbase1&=8/(rgb&(modulo&(1))/32)
+disbase2&=rgb&(modulo&(1))*2
+' Calc Software
+FOR ccount&=0 TO rgb&(modulo&(0))-1
+  FOR ycount&=0 TO rgb&(modulo&(2))-1
+    FOR xcount&=0 TO rgb&(modulo&(1))-1
+      CARD{screen_adr%+xcount&*2+(ccount& MOD disbase1&)*disbase2&+INT(ccount&/disbase1&)*base%+ycount&*largeur&}=ccount&*color&(0)+xcount&*color&(1)+ycount&*color&(2)
+    NEXT xcount&
+  NEXT ycount&
+NEXT ccount&
+' Restore Hardware
+VOID INP(2)
+GOSUB change_reso(0)
+EDIT
+'
+PROCEDURE change_reso(type&)
+  IF type&=1 THEN
+    old_screen_mode&=XBIOS(88,W:-1)
+    VOID XBIOS(5,L:0,L:0,W:3,W:&X110100)                   ! Set new Mode
+  ELSE IF type&=0
+    VOID XBIOS(5,L:0,L:0,W:3,W:old_screen_mode&)           ! Restore old Mode
+  ENDIF
+RETURN
