@@ -2,9 +2,9 @@
 
 Atari Falcon030 program to display all colors
 
-![grab0001](https://github.com/Kochise/cqsr/blob/master/grab0001.png?raw=true)
+![grab0001](https://raw.githubusercontent.com/Kochise/csqr/master/grab0001.png)
 
-![grab0002](https://github.com/Kochise/cqsr/blob/master/grab0002.png?raw=true)
+![grab0002](https://raw.githubusercontent.com/Kochise/csqr/master/grab0002.png)
 
 * Hardware and software needed
 
